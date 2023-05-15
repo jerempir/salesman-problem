@@ -1,24 +1,26 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import  messagebox
 from template import Main_template
 from alg import annealing_alg,neighbor_alg, annealing_algF, ant_alg
-
+import tkinter.ttk as ttk
+from ttkthemes import ThemedStyle
 def on_closing():
     if messagebox.askokcancel("Выход", "Вы действительно хотите выйти?"): root.destroy()
 
 root = tk.Tk()
 root.geometry("1000x500")
 root.protocol("WM_DELETE_WINDOW", on_closing)
-
+style = ThemedStyle(root)
+style.set_theme("adapta") #scidgrey
 notebook = ttk.Notebook(root)
 notebook.pack(fill='both', expand=True)
 
 # Создаем две вкладки в нотбуке
-tab1 = tk.Frame(notebook)
-tab2 = tk.Frame(notebook)
-tab3 = tk.Frame(notebook)
+tab1 = ttk.Frame(notebook)
+tab2 = ttk.Frame(notebook)
+tab3 = ttk.Frame(notebook)
 notebook.add(tab1, text='Алгоритм ближайшего соседа')
 notebook.add(tab2, text='Алгоритм отжига')
 notebook.add(tab3, text='Муравьиный алгоритм')

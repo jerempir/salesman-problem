@@ -1,18 +1,17 @@
 import tkinter as tk
-from tkinter import ttk
-from tkinter import simpledialog
 
+from tkinter import simpledialog
+import tkinter.ttk as ttk
 class myWindow:
     def __init__(self, root, color):
         self.root = root
         self.color = color
         # Создаем два главных фрейма
-        self.left_frame = tk.Frame(self.root, height=250, width=500)
-        self.right_frame = tk.Frame(self.root, height=250, width=500)
-        #self.left_frame.pack(side="left", fill="both", expand=True)
-        #self.right_frame.pack(side="right", fill="both", expand=True)
-        self.left_frame.grid(row=0, column=0, sticky="nsew")
-        self.right_frame.grid(row=0, column=1, sticky="nsew")
+        self.left_frame = ttk.Frame(self.root, height=250, width=500)
+        self.right_frame = ttk.Frame(self.root, height=250, width=500)
+
+        self.left_frame.pack(side='left',fill="both", expand=False)
+        self.right_frame.pack(side='right',fill="both", expand=True)
 
         # Задаем пропорции растяжения для колонок grid
         self.root.columnconfigure(0, weight=1)
@@ -22,20 +21,18 @@ class myWindow:
         self.root.bind("<Configure>", self.on_resize)
 
 
-
         # Создаем два фрейма в левом фрейме
-        self.top_left_frame = tk.LabelFrame(self.left_frame, text='Input area', bg=self.color, height=125, width=500)
-        self.middle_left_frame = tk.LabelFrame(self.left_frame, text='Table area', bg=self.color, height=125, width=500)
-        self.bottom_left_frame = tk.LabelFrame(self.left_frame, text='Result area', bg=self.color, height=125, width=500)
-        self.top_left_frame.pack(side="top", fill="both", expand=True)
-        self.middle_left_frame.pack(side="top", fill="both", expand=True)
-        self.bottom_left_frame.pack(side="bottom", fill="both", expand=True)
+        self.top_left_frame = ttk.LabelFrame(self.left_frame, text='Input area', height=125, width=250)
+        self.middle_left_frame = ttk.LabelFrame(self.left_frame, text='Table area',  height=125, width=250)
+        self.bottom_left_frame = ttk.LabelFrame(self.left_frame, text='Result area',  height=125, width=250)
+        self.top_left_frame.pack(side="top", fill="both", expand=False)
+        self.middle_left_frame.pack(side="top", fill="both", expand=False)
+        self.bottom_left_frame.pack(side="bottom", fill="both", expand=False)
 
         # Создаем два фрейма в правом фрейме
-        self.top_right_frame = tk.LabelFrame(self.right_frame, text='Canvas area', bg=self.color, height=125, width=500)
-        #self.bottom_right_frame = tk.LabelFrame(self.right_frame, text='Table area', bg=self.color, height=125, width=250)
+        self.top_right_frame = ttk.LabelFrame(self.right_frame, text='Canvas area',  height=125, width=500)
         self.top_right_frame.pack(side="top", fill="both", expand=True)
-        #self.bottom_right_frame.pack(side="bottom", fill="both", expand=True)
+
 
     def on_resize(self, event):
         # Получаем текущую ширину окна
@@ -54,7 +51,7 @@ class Button:
         self.command = command
         self.root = root
         self.text = text
-        button = tk.Button(self.root, text=self.text, command=lambda: self.command(self.arg))
+        button = ttk.Button(self.root, text=self.text, command=lambda: self.command(self.arg))
         button.pack()
 
 
@@ -67,12 +64,12 @@ class labeledSpinbox():
         self.spinbox_default = spinbox_default
         self.spinbox_step = spinbox_step
         # Создаем виджет Label
-        self.widget_frame = tk.Frame(self.root)
+        self.widget_frame = ttk.Frame(self.root)
         self.widget_frame.pack(side=tk.TOP)
-        self.label = tk.Label(self.widget_frame, text=self.label_text,font=("Arial", 10))
+        self.label = ttk.Label(self.widget_frame, text=self.label_text,font=("Arial", 10))
         self.label.pack(side=tk.LEFT)
         # Создаем виджет Spinbox
-        self.spinbox = tk.Spinbox(self.widget_frame, from_=self.spinbox_from, to=self.spinbox_to, width=10, increment=self.spinbox_step,font=("Arial", 10))
+        self.spinbox = ttk.Spinbox(self.widget_frame, from_=self.spinbox_from, to=self.spinbox_to, increment=self.spinbox_step,font=("Arial", 10))
         self.spinbox.delete(0, tk.END)  # удаляем стандартное значение
         self.spinbox.insert(0, spinbox_default)  # устанавливаем стандартное значение
         self.spinbox.pack(side=tk.LEFT)
@@ -241,20 +238,22 @@ class myResult:
         self.visited = []
         self.best_weight = 0
         self.counter = 0
-        self.label = tk.Label(self.root, text=f"Путь: {self.visited}")
-        self.label2 = tk.Label(self.root, text=f"Общий вес пути: {self.best_weight}")
-        self.label3 = tk.Label(self.root, text=f"Количество поколений: {self.counter}")
-        self.label.pack()
-        self.label2.pack()
+        self.text = tk.Text(self.root,width=40)
+        self.text.delete("1.0", 'end')
+        self.text.insert(1.0, f"Путь: {self.visited}\n")
+        self.text.insert(2.0, f"Общий вес пути: {self.best_weight}\n")
+        self.text.insert(3.0, f"Количество поколений: {self.counter}\n")
+        self.text.pack()
     def update_data_res(self,vis,wg,counter):
         self.visited = vis
         self.best_weight = wg
         self.counter = counter
-        self.label.config(text=f"Путь: {self.visited}")  # изменяем текст Label
-        self.label2.config(text=f"Общий вес пути: {self.best_weight}")
+        self.text.delete("1.0", 'end')
+        self.text.insert(1.0,f"Путь: {self.visited}\n")
+        self.text.insert(2.0, f"Общий вес пути: {self.best_weight}\n")
+
         if self.counter:
-            self.label3.config(text=f"Количество поколений: {self.counter}")
-            self.label3.pack()
+            self.text.insert(2.0, f"Количество поколений: {self.counter}\n")
 
 
 
