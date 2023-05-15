@@ -17,6 +17,8 @@ style.set_theme("adapta") #scidgrey
 notebook = ttk.Notebook(root)
 notebook.pack(fill='both', expand=True)
 
+
+
 # Создаем две вкладки в нотбуке
 tab1 = ttk.Frame(notebook)
 tab2 = ttk.Frame(notebook)
